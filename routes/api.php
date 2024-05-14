@@ -26,4 +26,5 @@ use Illuminate\Support\Facades\Route;
     Route::middleware('auth:api')->group(function () {
         Route::get('get-voucher', [VoucherController::class, 'getVoucher'])->name('get-voucher');
         Route::get('voucher/{id}/detail', [VoucherController::class, 'detailVoucher'])->name('detail-voucher');
+        Route::get('voucher/{id}/claim', [VoucherController::class, 'claimVoucher'])->name('claim-voucher');
     });

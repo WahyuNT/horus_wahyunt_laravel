@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nama',255);
             $table->string('foto',255);
             $table->string('kategori', 255);
-            $table->enum('status', ['aktif', 'tidak aktif']);
+            $table->enum('status', ['aktif', 'tidak aktif', 'diklaim']);
             $table->timestamps();
         });
     }
