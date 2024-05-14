@@ -50,4 +50,14 @@ class VoucherController extends Controller
              'data'    => $voucher,
          ], 200);
     }
+
+    public function history(){
+        $voucher = Voucher::where('status','terklaim')->get();
+        
+
+        return response()->json([
+            'success' => true,
+            'data'    => $voucher,
+        ], 200);
+   }
 }

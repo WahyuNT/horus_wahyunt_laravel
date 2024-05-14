@@ -28,4 +28,6 @@ use Illuminate\Support\Facades\Route;
         Route::get('voucher/{id}/detail', [VoucherController::class, 'detailVoucher'])->name('detail-voucher');
         Route::post('voucher/{id}/claim', [VoucherController::class, 'claimVoucher'])->name('claim-voucher');
         Route::post('voucher/{id}/remove', [VoucherController::class, 'removeVoucher'])->name('remove-voucher');
-    });
+
+        Route::get('history', [VoucherController::class, 'history'])->name('history');
+    }); 
