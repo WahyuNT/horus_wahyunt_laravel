@@ -12,9 +12,12 @@ class VoucherController extends Controller
          $voucher = Voucher::where('status','aktif')
          ->get();
 
+         $voucherCountCategory =$voucher->count();
+
          return response()->json([
              'success' => true,
              'data'    => $voucher,
+                'count'   => $voucherCountCategory
          ], 200);
     }
     public function detailVoucher($id){
@@ -29,6 +32,17 @@ class VoucherController extends Controller
          $voucher = Voucher::where('id',$id)->first();
             $voucher->update([
                 'status' => 'terklaim'
+            ]);
+
+         return response()->json([
+             'success' => true,
+             'data'    => $voucher,
+         ], 200);
+    }
+     public function removeVoucher($id){
+         $voucher = Voucher::where('id',$id)->first();
+            $voucher->update([
+                'status' => 'aktif'
             ]);
 
          return response()->json([
