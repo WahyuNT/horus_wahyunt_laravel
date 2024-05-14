@@ -19,50 +19,65 @@ class UserController extends Controller
             'nama'  => 'required|min:5',
             'tanggal_daftar'  => 'required|date'
         ]);
+
+
+        //if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        //create user
+        $user = User::create([
+            'username'      => $request->username,
+            'password'  => bcrypt($request->password),
+            'email'     => $request->email,
+            'nama'     => $request->nama,
+            'tanggal_daftar'     => $request->tanggal_daftar
+        ]);
 
-        $data = new User();
-        $data->username = $request->username;
-        $data->password = $request->password;
-        $data->email = $request->email;
-        $data->nama = $request->nama;
-        $data->tanggal_daftar = $request->tanggal_daftar;
-        $data->save();
-
-        if ($data) {
+        //return response JSON user is created
+        if($user) {
             return response()->json([
                 'success' => true,
-                'user'    => $data,
+                'user'    => $user,  
             ], 201);
         }
+
+        //return JSON process insert failed 
+        return response()->json([
+            'success' => false,
+        ], 409);
     }
 
     public function login(Request $request)
     {
+        //set validation
         $validator = Validator::make($request->all(), [
             'username'     => 'required',
             'password'  => 'required'
         ]);
 
+        //if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        //get credentials from request
         $credentials = $request->only('username', 'password');
 
-        if (!$token = auth()->guard('api')->attempt($credentials)) {
+        //if auth failed
+        if(!$token = auth()->guard('api')->attempt($credentials)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Username atau Password Anda salah' 
+                'message' => 'Username atau Password Anda salah'
             ], 401);
         }
+
+        //if auth success
         return response()->json([
             'success' => true,
-            'user'    => auth()->guard('api')->user(),
-            'token'   => $token
+            'user'    => auth()->guard('api')->user(),    
+            'token'   => $token   
         ], 200);
     }
 }
