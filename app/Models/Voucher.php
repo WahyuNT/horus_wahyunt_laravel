@@ -14,4 +14,9 @@ class Voucher extends Model
         'kategori',
         'status'
     ];
+
+    public function claimVouchers()
+    {
+        return $this->hasMany(VoucherClaim::class, 'id_voucher', 'id');
+    }
 }

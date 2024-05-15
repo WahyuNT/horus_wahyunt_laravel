@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -22,12 +23,13 @@ class UserController extends Controller
         ]);
 
 
-        //if validation fails
+        
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            $errorMessages = implode(', ', $validator->errors()->all());
+            return response()->json(['errors' => $errorMessages], 422);
         }
 
-        //create user
+      
         $user = User::create([
             'username'      => $request->username,
             'password'  => bcrypt($request->password),
@@ -36,7 +38,7 @@ class UserController extends Controller
             'tanggal_daftar'     => $request->tanggal_daftar
         ]);
 
-        //return response JSON user is created
+       
         if($user) {
             return response()->json([
                 'success' => true,
@@ -44,7 +46,7 @@ class UserController extends Controller
             ], 201);
         }
 
-        //return JSON process insert failed 
+ 
         return response()->json([
             'success' => false,
         ], 409);
@@ -81,5 +83,20 @@ class UserController extends Controller
             'token'   => $token   
         ], 200);
     }
+
+    public function logout()
+    {        
+        //remove token
+        $removeToken = JWTAuth::invalidate(JWTAuth::getToken());
+
+        if($removeToken) {
+            //return response JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout Berhasil!',  
+            ]);
+        }
+    }
+    
 
 }
