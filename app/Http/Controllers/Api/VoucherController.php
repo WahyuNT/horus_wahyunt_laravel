@@ -73,11 +73,12 @@ class VoucherController extends Controller
     public function history(){
 
         $voucher =VoucherClaim::with('voucher')->get();
-        
-
+        $total = $voucher->count();
+       
         return response()->json([
             'success' => true,
             'data'    => $voucher,
+            'total'   => $total
         ], 200);
    }
     public function historyKategori($kategori){
@@ -86,10 +87,11 @@ class VoucherController extends Controller
             $query->where('kategori', $kategori);
         })->with('voucher')->get();
         
-
+        
         return response()->json([
             'success' => true,
             'data'    => $voucher,
+           
         ], 200);
    }
 
@@ -144,9 +146,12 @@ class VoucherController extends Controller
         ];
     }
 
+    $total = array_sum(array_column($kategoriData, 'jumlah'));
+
     return response()->json([
         'success' => true,
         'data' => $kategoriData,
+        'total' => $total
     ], 200);
     }
 
